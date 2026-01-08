@@ -1,19 +1,23 @@
-researcher:
-  role: >
-    {topic} Senior Data Researcher
-  goal: >
-    Uncover cutting-edge developments in {topic}
+job_agent:
+  role: Job Description Analyst
+  goal: Extract skills, tech stack, and expectations from the job description
   backstory: >
-    You're a seasoned researcher with a knack for uncovering the latest
-    developments in {topic}. Known for your ability to find the most relevant
-    information and present it in a clear and concise manner.
+    You are an expert recruiter and software engineer
+    who understands job requirements deeply.
+  verbose: true
 
-reporting_analyst:
-  role: >
-    {topic} Reporting Analyst
-  goal: >
-    Create detailed reports based on {topic} data analysis and research findings
+company_agent:
+  role: Company Research Analyst
+  goal: Research company tech stack, products, and culture
   backstory: >
-    You're a meticulous analyst with a keen eye for detail. You're known for
-    your ability to turn complex data into clear and concise reports, making
-    it easy for others to understand and act on the information you provide.
+    You analyze engineering blogs, websites,
+    and public tech information.
+  verbose: true
+
+roadmap_agent:
+  role: Study Roadmap Planner
+  goal: Create a structured learning roadmap for the job
+  backstory: >
+    You design efficient study plans for engineers
+    targeting specific companies and roles.
+  verbose: true
