@@ -4,10 +4,10 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 load_dotenv()
 
+from roadmap.cache.redis_client import redis_client
 from roadmap.crew import RoadmapCrew
 from roadmap.utils.linkedin import extract_job_id
 from roadmap.services.job_fetcher import fetch_linkedin_job
-from roadmap.cache.job_cache import get_job, save_job
 from roadmap.cache.roadmap_cache import get_roadmap, save_roadmap
 
 app = FastAPI(
@@ -19,12 +19,6 @@ app = FastAPI(
 # ---------- REQUEST SCHEMAS ----------
 
 class RoadmapRequest(BaseModel):
-    job_id: str
-    company_name: str
-    job_description: str
-
-
-class JobURLRequest(BaseModel):
     job_url: str
 
 
@@ -34,63 +28,54 @@ class RoadmapResponse(BaseModel):
     roadmap: str
 
 
-class JobIngestResponse(BaseModel):
-    job_id: str
-    company_name: str
-    job_title: str
-    job_description: str
-
-
 # ---------- ENDPOINTS ----------
 
 @app.post("/generate-roadmap", response_model=RoadmapResponse)
 async def generate_roadmap(request: RoadmapRequest):
+    job_id = extract_job_id(request.job_url)
+    lock_key = f"roadmap:lock:{job_id}"
+    lock_acquired = False
     try:
-        job_id = request.job_id
+
         cached = get_roadmap(job_id)
         if cached:
             return RoadmapResponse(roadmap=cached["roadmap"])
         
+        job = await run_in_threadpool(fetch_linkedin_job, request.job_url)
+
+        lock_acquired = redis_client.setnx(lock_key, "1")
+        if not lock_acquired:
+            raise HTTPException(
+                status_code=409,
+                detail="Roadmap is already being generated for this job"
+            )
+
+        redis_client.expire(lock_key, 120)  # safety TTL
+
         crew = RoadmapCrew().crew()
 
         result = await run_in_threadpool(crew.kickoff,
             {
-                "company_name": request.company_name,
-                "job_description": request.job_description
+                "company_name": job.company_name,
+                "job_description": job.job_description
             }
         )
 
         roadmap_text = str(result)
-
         save_roadmap(job_id, {
             "roadmap": roadmap_text
         })
 
         return RoadmapResponse(roadmap=roadmap_text)
+    
+    except Exception as e:
+        raise
 
     except Exception as e:
         raise HTTPException(
             status_code=500,
             detail=f"Roadmap generation failed: {str(e)}"
         )
-
-
-@app.post("/job/ingest", response_model=JobIngestResponse)
-async def ingest_job(payload: JobURLRequest):
-    try:
-        job_id = extract_job_id(payload.job_url)
-
-        cached = get_job(job_id)
-        if cached:
-            return cached
-
-        job = await run_in_threadpool(fetch_linkedin_job, payload.job_url)
-        save_job(job_id, job.dict())
-
-        return job
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Job ingestion failed: {str(e)}"
-        )
+    
+    finally:
+        redis_client.delete(lock_key)
