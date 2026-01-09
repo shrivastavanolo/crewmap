@@ -1,5 +1,6 @@
-from crewai import Crew, Agent, Task
+from crewai import Crew, Agent, Task, LLM
 from crewai.project import CrewBase, agent, task
+import os
 
 @CrewBase
 class RoadmapCrew:
@@ -75,5 +76,9 @@ class RoadmapCrew:
                 self.company_analysis(),
                 self.roadmap_creation(),
             ],
-            verbose=True,
+            verbose=False,
+            llm=LLM(
+                model=os.getenv("MODEL"),
+                temperature=0.2
+            )
         )
