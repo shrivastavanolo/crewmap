@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel
 from dotenv import load_dotenv
 load_dotenv()
@@ -43,7 +44,7 @@ class JobIngestResponse(BaseModel):
 # ---------- ENDPOINTS ----------
 
 @app.post("/generate-roadmap", response_model=RoadmapResponse)
-def generate_roadmap(request: RoadmapRequest):
+async def generate_roadmap(request: RoadmapRequest):
     try:
         job_id = request.job_id
         cached = get_roadmap(job_id)
@@ -52,8 +53,8 @@ def generate_roadmap(request: RoadmapRequest):
         
         crew = RoadmapCrew().crew()
 
-        result = crew.kickoff(
-            inputs={
+        result = await run_in_threadpool(crew.kickoff,
+            {
                 "company_name": request.company_name,
                 "job_description": request.job_description
             }
@@ -75,7 +76,7 @@ def generate_roadmap(request: RoadmapRequest):
 
 
 @app.post("/job/ingest", response_model=JobIngestResponse)
-def ingest_job(payload: JobURLRequest):
+async def ingest_job(payload: JobURLRequest):
     try:
         job_id = extract_job_id(payload.job_url)
 
@@ -83,7 +84,7 @@ def ingest_job(payload: JobURLRequest):
         if cached:
             return cached
 
-        job = fetch_linkedin_job(payload.job_url)
+        job = await run_in_threadpool(fetch_linkedin_job, payload.job_url)
         save_job(job_id, job.dict())
 
         return job
