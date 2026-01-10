@@ -1,54 +1,149 @@
-# Roadmap Crew
+<div align="center">
 
-Welcome to the Roadmap Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+<img src="../roadmap/misc/crewmap_logo.png" alt="Job Crewmap Logo" width="120"/>
 
-## Installation
+# Crewmap 
+## Job Roadmap Generator (Backend)
 
-Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+**A production-grade backend that converts LinkedIn job listings into structured learning roadmaps using a multi-agent AI system.**
 
-First, if you haven't already, install uv:
+[Live Demo](https://your-demo-site-link.com) · [API Docs](https://your-demo-site-link.com/docs)
 
-```bash
-pip install uv
+</div>
+
+---
+
+## Overview
+
+This service takes a **LinkedIn job URL** and returns a **clear, role-specific study roadmap**.  
+It is built as a backend-first system with a strong focus on correctness, concurrency safety, caching, and real-world multi-user behavior.
+
+The roadmap itself is generated using a **multi-agent CrewAI system**, where each agent analyzes a different part of the job context before producing a consolidated learning plan.
+
+---
+
+## What This Backend Does
+
+- Extracts job IDs from LinkedIn job URLs
+- Fetches and normalizes job descriptions
+- Runs a multi-agent AI workflow to:
+  - analyze company context
+  - analyze job requirements
+  - synthesize a structured study roadmap
+- Caches generated roadmaps in Redis
+- Uses Redis-based locking to prevent duplicate generation during concurrent requests
+
+---
+
+## Tech Stack
+
+### Core
+- Python 3.11+
+- FastAPI
+- Pydantic
+
+### AI
+- CrewAI (agent orchestration)
+- Gemini (LLM provider)
+
+### Infrastructure
+- Redis (Redis Cloud)
+
+---
+
+## High-Level Request Flow
+
+1. Client sends a LinkedIn job URL
+2. Job ID is extracted from the URL
+3. Redis is checked for an existing roadmap
+4. If cached → return immediately
+5. If not cached:
+   - Acquire a Redis lock for the job ID
+   - Fetch job details
+   - Execute the CrewAI workflow
+   - Store the roadmap in Redis
+   - Release the lock
+6. Return the roadmap to the client
+
+This ensures idempotency, safe parallel usage, and minimal LLM cost.
+
+---
+
+## API
+
+### `POST /generate-roadmap`
+
+Generates or retrieves a cached roadmap for a LinkedIn job.
+
+#### Request
+```json
+{
+  "job_url": "https://www.linkedin.com/jobs/view/software-engineer-123456789/"
+}
+````
+
+#### Response
+
+```json
+{
+  "roadmap": "Week 1: Backend fundamentals...\nWeek 2: System design..."
+}
 ```
 
-Next, navigate to your project directory and install the dependencies:
+---
 
-(Optional) Lock the dependencies and install them by using the CLI command:
-```bash
-crewai install
-```
-### Customizing
+## Environment Variables
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+Create a `.env` file in the project root and follow .env.example
 
-- Modify `src/roadmap/config/agents.yaml` to define your agents
-- Modify `src/roadmap/config/tasks.yaml` to define your tasks
-- Modify `src/roadmap/crew.py` to add your own logic, tools and specific args
-- Modify `src/roadmap/main.py` to add custom inputs for your agents and tasks
+---
 
-## Running the Project
-
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+## Running Locally
 
 ```bash
-$ crewai run
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+uvicorn roadmap.api:app --reload
 ```
 
-This command initializes the roadmap Crew, assembling the agents and assigning them tasks as defined in your configuration.
+* API: [http://localhost:8000](http://localhost:8000)
+* Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+---
 
-## Understanding Your Crew
+## Project Structure
 
-The roadmap Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
+```
+roadmap/
+│
+├── api.py                  # FastAPI application
+├── crew.py                 # CrewAI agents and tasks
+│
+├── cache/
+│   ├── redis_client.py     # Redis connection
+│   └── roadmap_cache.py   # Cache and lock helpers
+│
+├── services/
+│   └── job_fetcher.py      # Job data extraction
+│
+├── utils/
+│   └── linkedin.py         # LinkedIn URL parsing
+│
+└── .env
+```
 
-## Support
+---
 
-For support, questions, or feedback regarding the Roadmap Crew or crewAI.
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
+## Design Notes
 
-Let's create wonders together with the power and simplicity of crewAI.
+* Redis is used instead of in-memory caching to support multiple users and instances
+* Redis locks prevent duplicate roadmap generation under concurrent access
+* Blocking AI operations are safely offloaded using thread pools
+* The backend is stateless aside from Redis, making it horizontally scalable
+
+---
+
+## Demo
+
+* **Live demo:** [https://your-demo-site-link.com](https://your-demo-site-link.com)
