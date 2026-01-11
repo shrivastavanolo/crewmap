@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.concurrency import run_in_threadpool
+from fastapi.middleware.cors import CORSMiddleware
+
 from pydantic import BaseModel
 from dotenv import load_dotenv
 load_dotenv()
@@ -15,6 +17,18 @@ app = FastAPI(
     description="Generates a personalized learning roadmap using CrewAI",
     version="1.0.0"
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",  # Vite dev (replace this with the actual origins)
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # ---------- REQUEST SCHEMAS ----------
 
