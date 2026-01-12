@@ -15,7 +15,7 @@ export default function Home() {
   const [roadmap, setRoadmap] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const roadmapRef = useRef(null);
+  const roadmapRef = useRef<HTMLDivElement | null>(null);
   const [history, setHistory] = useState<SavedRoadmap[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -110,7 +110,7 @@ export default function Home() {
         )}
         {roadmap && (
           <div ref={roadmapRef} className="mt-10">
-            <RoadmapResult roadmap={roadmap} />
+            <RoadmapResult roadmap={roadmap}/>
           </div>
         )}
       </div>
