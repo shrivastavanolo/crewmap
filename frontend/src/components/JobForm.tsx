@@ -1,4 +1,5 @@
 import { useState } from "react";
+import RoadmapLoader from "@/components/RoadmapLoader";
 
 type Props = {
   onSubmit: (jobUrl: string) => void;
@@ -29,6 +30,7 @@ export default function JobForm({ onSubmit, loading }: Props) {
       >
         {loading ? "Generating roadmap..." : "Generate Roadmap"}
       </button>
+      {loading && <RoadmapLoader />}
     </div>
   );
 }

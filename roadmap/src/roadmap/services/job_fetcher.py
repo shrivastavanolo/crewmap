@@ -20,6 +20,6 @@ def fetch_linkedin_job(job_url: str) -> JobData:
         job_id="extracted",
         job_url=job_url,
         job_title=title.text.strip() if title else "",
-        company_name=company.text.strip() if company else "",
+        company_name=company.text.strip() if company else "Company",
         job_description=description.text.strip() if description else "",
     )

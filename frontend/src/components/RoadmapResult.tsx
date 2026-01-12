@@ -1,7 +1,7 @@
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import { downloadMarkdown } from "@/utils/roadmapDownloader";
+import { splitRoadmap } from "@/utils/splitRoadmap";
+import RoadmapSection from "./RoadmapSection";
 
 type Props = {
   roadmap: string;
@@ -9,6 +9,7 @@ type Props = {
 
 export default function RoadmapResult({ roadmap }: Props) {
   const [copied, setCopied] = useState(false);
+  const sections = splitRoadmap(roadmap);
 
   const handleCopy = async () => {
     try {
@@ -44,12 +45,17 @@ export default function RoadmapResult({ roadmap }: Props) {
         </div>
 
       </div>
-      <article className="prose prose-invert max-w-none break-words overflow-auto">
-        <ReactMarkdown
-          rehypePlugins={[rehypeRaw]}>
-          {roadmap}
-        </ReactMarkdown>
-      </article>
+      <div className="space-y-4">
+        {sections.map((section, i) => (
+          <RoadmapSection
+            key={i}
+            title={section.title}
+            content={section.content}
+            defaultOpen={i === 0}
+          />
+        ))}
+      </div>
+
     </div>
   );
 }

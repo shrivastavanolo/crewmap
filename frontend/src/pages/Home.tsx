@@ -110,7 +110,7 @@ export default function Home() {
         )}
         {roadmap && (
           <div ref={roadmapRef} className="mt-10">
-            <RoadmapResult roadmap={roadmap}/>
+            <RoadmapResult roadmap={roadmap} />
           </div>
         )}
       </div>
