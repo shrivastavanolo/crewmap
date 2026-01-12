@@ -9,9 +9,9 @@ export default function JobForm({ onSubmit, loading }: Props) {
   const [jobUrl, setJobUrl] = useState("");
 
   return (
-    <div className="rounded-2xl bg-zinc-900/70 backdrop-blur border border-zinc-800 p-8 shadow-xl space-y-6">
+    <div className="rounded-2xl bg-zinc-900/50 backdrop-blur border border-zinc-800 p-8 shadow-xl space-y-6">
       <div className="space-y-2 text-center">
-        <h2 className="text-xl font-semibold">Paste Job URL</h2>
+        <h2 className="text-xl font-semibold">Paste LinkedIn Job URL</h2>
       </div>
 
       <input
@@ -24,7 +24,8 @@ export default function JobForm({ onSubmit, loading }: Props) {
       <button
         onClick={() => onSubmit(jobUrl)}
         disabled={loading || !jobUrl}
-        className="w-full rounded-lg bg-red-800 py-3 font-medium hover:bg-red-900 disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full rounded-lg bg-red-800 py-3 font-medium hover:bg-red-900 disabled:cursor-not-allowed disabled:opacity-50 ease-out transform
+          hover:scale-105 transition duration-500"
       >
         {loading ? "Generating roadmap..." : "Generate Roadmap"}
       </button>

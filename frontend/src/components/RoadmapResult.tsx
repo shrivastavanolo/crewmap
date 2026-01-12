@@ -24,7 +24,7 @@ export default function RoadmapResult({ roadmap }: Props) {
   };
 
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
+    <div className="rounded-xl border backdrop-blur border-zinc-800 bg-zinc-900/50 p-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Your Learning Roadmap</h2>
 
@@ -36,7 +36,7 @@ export default function RoadmapResult({ roadmap }: Props) {
         </button>
       </div>
 
-      <article className="prose prose-invert max-w-none">
+      <article className="prose prose-invert max-w-none break-words overflow-auto">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw]}>
