@@ -17,7 +17,7 @@ export default function RoadmapSection({
     const [open, setOpen] = useState(defaultOpen);
 
     return (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
+        <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-auto">
             <button
                 onClick={() => setOpen(!open)}
                 className="
@@ -44,7 +44,7 @@ export default function RoadmapSection({
           ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}
         `}
             >
-                <div className="overflow-hidden px-5 pb-5">
+                <div className="overflow-auto px-5 pb-5">
                     <article className="prose prose-invert max-w-none">
                         <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                             {content}

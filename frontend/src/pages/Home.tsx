@@ -43,7 +43,7 @@ export default function Home() {
       saveRoadmap(jobUrl, data.roadmap);
       setHistory(getRoadmaps());
     } catch (e: any) {
-      setError(e.message);
+      setError("Oops! Please check your URL or try again later.");
     } finally {
       setLoading(false);
     }
@@ -51,6 +51,7 @@ export default function Home() {
 
   const handleSelectHistory = (item: SavedRoadmap) => {
     setRoadmap(item.roadmap);
+    setError("");
   };
 
   const handleClearHistory = () => {
@@ -106,7 +107,7 @@ export default function Home() {
         <JobForm onSubmit={handleGenerate} loading={loading} />
 
         {error && (
-          <div className="text-red-400 text-sm">{error}</div>
+          <div className="text-zinc-400 text-sm text-center">{error}</div>
         )}
         {roadmap && (
           <div ref={roadmapRef} className="mt-10">
