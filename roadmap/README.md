@@ -3,7 +3,7 @@
 <img src="../roadmap/misc/crewmap_logo.png" alt="Job Crewmap Logo" width="120"/>
 
 # Crewmap 
-## Job Roadmap Generator (Backend)
+## Agentic Job Roadmap Generator (Backend)
 
 **A production-grade backend that converts LinkedIn job listings into structured learning roadmaps using a multi-agent AI system.**
 
@@ -53,6 +53,8 @@ The roadmap itself is generated using a **multi-agent CrewAI system**, where eac
 
 ## High-Level Request Flow
 
+<img src="../roadmap/misc/backend_sequence_diagram.png" alt="Backend request flow"/>
+
 1. Client sends a LinkedIn job URL
 2. Job ID is extracted from the URL
 3. Redis is checked for an existing roadmap
@@ -66,6 +68,10 @@ The roadmap itself is generated using a **multi-agent CrewAI system**, where eac
 6. Return the roadmap to the client
 
 This ensures idempotency, safe parallel usage, and minimal LLM cost.
+
+## Agentic AI system flow
+
+<img src="../roadmap/misc/ai_sequence_diagram.png" alt="AI request flow"/>
 
 ---
 
