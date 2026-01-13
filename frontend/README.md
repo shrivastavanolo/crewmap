@@ -1,73 +1,90 @@
-# React + TypeScript + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<img src="../roadmap/misc/crewmap_logo.png" alt="Crewmap Logo" width="120"/>
 
-Currently, two official plugins are available:
+# Crewmap 
+## Agentic Job Roadmap Generator (Frontend)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**A React-based frontend that provides an interactive, AI-powered roadmap generation experience with modular components, local storage history, and export options.**
 
-## React Compiler
+[Live Demo](https://your-demo-site-link.com)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+</div>
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Overview
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Crewmap Frontend allows users to generate **personalized, role-specific study roadmaps** using AI.  
+The application is **modular, interactive, and responsive**, designed to work seamlessly with the backend AI engine.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Key features include:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Section-wise roadmap rendering
+- Collapsible roadmap blocks
+- LocalStorage-based history
+- Download as Markdown
+- Interactive loader during AI processing
+- Fully responsive sidebar and UI
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Tech Stack
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Core
+
+- React 18+ with TypeScript
+- Tailwind CSS for styling
+- React hooks for state management
+
+### Utilities
+
+- LocalStorage API for persistence
+- Markdown parsing and rendering
+- Modular React components for layout, loader, roadmap, and history
+
+---
+
+## User Interaction Flow
+
+1. User inputs job description or company info
+2. Loader pixel game is displayed while AI generates roadmap
+3. Roadmap is rendered in collapsible sections
+4. Users can interact with sections, collapse/expand, or scroll
+5. Generated roadmap is saved to LocalStorage automatically
+6. Users can revisit previous roadmaps via sidebar
+7. Roadmaps can be exported as Markdown or PDF
+
+<img src="./src/assets/frontend_sequence_diagram.png" alt="Frontend sequence diagram"/>
+
+---
+
+## Running Locally
+
+```bash
+npm install
+npm run dev
+````
+
+* Open [http://localhost:5173](http://localhost:5173) to see the app
+* Sidebar displays history and allows clearing entries
+* Pixel loader engages users during AI processing
+
+---
+
+## Design Philosophy
+
+* **Modular Components:** Isolated, reusable UI pieces for roadmap, loader, and history
+* **Interactivity:** Loader game, collapsible sections, and clickable history entries
+* **Responsiveness:** Sidebar toggle, full-width roadmap display, mobile-friendly
+* **User Engagement:** Pixel game keeps users busy during AI latency
+
+---
+
+## Future Improvements
+
+* User authentication and cloud-synced history
+* Real-time roadmap progress tracking
+* Additional mini-games for loaders
+* More export formats (Excel, Google Docs)
+* Customizable roadmap templates
