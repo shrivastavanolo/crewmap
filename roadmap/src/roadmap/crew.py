@@ -1,6 +1,10 @@
-from crewai import Crew, Agent, Task, LLM
+from crewai import Crew, Agent, Task, LLM, Process
 from crewai.project import CrewBase, agent, task
 import os
+from crewai_tools import SerperDevTool, WebsiteSearchTool
+
+# Instantiate tools
+search_tool = SerperDevTool()
 
 @CrewBase
 class RoadmapCrew:
@@ -10,21 +14,13 @@ class RoadmapCrew:
     # -------- AGENTS --------
 
     @agent
-    def job_agent(self) -> Agent:
-        return Agent(
-            role=self.agents_config["job_agent"]["role"],
-            goal=self.agents_config["job_agent"]["goal"],
-            backstory=self.agents_config["job_agent"]["backstory"],
-            verbose=True,
-        )
-
-    @agent
     def company_agent(self) -> Agent:
         return Agent(
             role=self.agents_config["company_agent"]["role"],
             goal=self.agents_config["company_agent"]["goal"],
             backstory=self.agents_config["company_agent"]["backstory"],
-            verbose=True,
+            tools=[search_tool],
+            verbose=False,
         )
 
     @agent
@@ -33,18 +29,11 @@ class RoadmapCrew:
             role=self.agents_config["roadmap_agent"]["role"],
             goal=self.agents_config["roadmap_agent"]["goal"],
             backstory=self.agents_config["roadmap_agent"]["backstory"],
-            verbose=True,
+            verbose=False,
+            allow_delegation=False,
         )
 
     # -------- TASKS --------
-
-    @task
-    def job_analysis(self) -> Task:
-        return Task(
-            description=self.tasks_config["job_analysis"]["description"],
-            expected_output=self.tasks_config["job_analysis"]["expected_output"],
-            agent=self.job_agent(),
-        )
 
     @task
     def company_analysis(self) -> Task:
@@ -60,6 +49,7 @@ class RoadmapCrew:
             description=self.tasks_config["roadmap_creation"]["description"],
             expected_output=self.tasks_config["roadmap_creation"]["expected_output"],
             agent=self.roadmap_agent(),
+            context=[self.company_analysis()],
         )
 
     # -------- CREW --------
@@ -67,18 +57,15 @@ class RoadmapCrew:
     def crew(self) -> Crew:
         return Crew(
             agents=[
-                self.job_agent(),
                 self.company_agent(),
                 self.roadmap_agent(),
             ],
             tasks=[
-                self.job_analysis(),
                 self.company_analysis(),
                 self.roadmap_creation(),
             ],
-            verbose=False,
-            llm=LLM(
-                model=os.getenv("MODEL"),
-                temperature=0.2
-            )
+            llm=LLM(model=os.getenv("MODEL"), temperature=0.2),
+            verbose=True,
+            memory=False,
+            process=Process.sequential,
         )

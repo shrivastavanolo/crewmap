@@ -1,28 +1,57 @@
-job_analysis:
-  description: >
-    Analyze the following job description:
-    {job_description}
-
-    Extract:
-    - Required skills
-    - Nice-to-have skills
-    - Seniority level
-    - Interview focus areas
-  expected_output: Structured job requirements
-  agent: job_agent
-
 company_analysis:
   description: >
-    Research the company named {company_name}.
-    Find:
-    - Overview
-    - Likely tech stack
-  expected_output: Company overview and tech stack
-  agent: company_agent
+    Research the company "{company_name}" using internet search.
+
+    Objective:
+    Extract concise, factual engineering-relevant information.
+
+    Output ONLY the following fields:
+    - Domain:
+    - What the company does (1 sentence):
+    - Core products/services (bullet list, max 3):
+    - Likely tech stack:
+
+    Rules:
+    - Use public sources only (company site, GitHub)
+    - Be concise and factual
+    - No explanations or reasoning
+    - No markdown formatting
+    - Max 120 words total
+    - If information is unclear, write "Unknown"
+
+  expected_output: >
+    A compact, structured company profile suitable for direct consumption
+    by another agent without further processing.
 
 roadmap_creation:
   description: >
-    Using the job requirements and company research,
-    create a 2-week study roadmap tailored to the role with resources.
-  expected_output: Week-wise study roadmap
-  agent: roadmap_agent
+    You are given:
+
+    Job Description:
+    {job_description}
+
+    Company Research
+
+    Tasks:
+    1. Extract required vs optional skills
+    2. Align learning priorities with company tech stack
+    3. Create a 2-week study roadmap
+
+    Output format:
+    ## Week 1
+    - Topic
+      - Subtopics
+      - Resources
+
+    ## Week 2
+    - Topic
+      - Subtopics
+      - Resources
+
+    Constraints:
+    - Max 500 words
+    - Bullet points only
+    - Practical + interview-focused
+    - No explanations or filler
+  expected_output: >
+    A clean, structured 2-week study roadmap
