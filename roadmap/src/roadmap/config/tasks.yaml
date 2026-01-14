@@ -48,10 +48,12 @@ roadmap_creation:
       - Subtopics
       - Resources
 
-    Constraints:
+  constraints: >
     - Max 500 words
     - Bullet points only
-    - Practical + interview-focused
-    - No explanations or filler
+    - Practical and interview-focused
+    - Output ONLY the roadmap
+    - Do NOT include any explanations, commentary, or backstory
+
   expected_output: >
-    A clean, structured 2-week study roadmap in the given output format
+    A clean, structured 2-week study roadmap strictly in the given output format, nothing else.
