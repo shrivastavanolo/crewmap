@@ -21,8 +21,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",  # Vite dev (replace this with the actual origins)
-        "http://127.0.0.1:5173",
+        "https://crewmap-ecru.vercel.app/",
     ],
     allow_credentials=True,
     allow_methods=["*"],
