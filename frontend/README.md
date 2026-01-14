@@ -7,7 +7,7 @@
 
 **A React-based frontend that provides an interactive, AI-powered roadmap generation experience with modular components, local storage history, and export options.**
 
-[Live Demo](https://your-demo-site-link.com)
+[Live Demo](https://crewmap-ecru.vercel.app/)
 
 </div>
 

@@ -7,7 +7,7 @@
 
 **A production-grade backend that converts LinkedIn job listings into structured learning roadmaps using a multi-agent AI system.**
 
-[Live Demo](https://your-demo-site-link.com) · [API Docs](https://your-demo-site-link.com/docs)
+[Live Demo](https://crewmap-ecru.vercel.app/)
 
 </div>
 
@@ -152,4 +152,4 @@ roadmap/
 
 ## Demo
 
-* **Live demo:** [https://your-demo-site-link.com](https://your-demo-site-link.com)
+* **Live demo:** [https://your-demo-site-link.com](https://crewmap-ecru.vercel.app/)

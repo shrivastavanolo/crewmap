@@ -8,7 +8,7 @@
 
 **Crewmap converts real job listings into structured, role-specific learning roadmaps using an agentic AI system.**
 
-[Live Demo](https://your-demo-site-link.com) · [API Docs](https://your-demo-site-link.com/docs)
+[Live Demo](https://crewmap-ecru.vercel.app/)
 
 </div>
 
