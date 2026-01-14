@@ -20,9 +20,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://crewmap-ecru.vercel.app/",
-    ],
+    allow_origins=["https://crewmap-ecru.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
