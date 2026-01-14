@@ -64,7 +64,7 @@ class RoadmapCrew:
                 self.company_analysis(),
                 self.roadmap_creation(),
             ],
-            llm=LLM(model=os.getenv("MODEL"), temperature=0.2),
+            llm=LLM(model=os.getenv("MODEL"), temperature=0.1),
             verbose=True,
             memory=False,
             process=Process.sequential,
