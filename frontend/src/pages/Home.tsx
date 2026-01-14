@@ -18,6 +18,7 @@ export default function Home() {
   const roadmapRef = useRef<HTMLDivElement | null>(null);
   const [history, setHistory] = useState<SavedRoadmap[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [jobUrl, setJobUrl] = useState("");
 
   useEffect(() => {
     setHistory(getRoadmaps());
@@ -32,15 +33,16 @@ export default function Home() {
     }
   }, [roadmap]);
 
-  const handleGenerate = async (jobUrl: string) => {
+  const handleGenerate = async (url: string) => {
+    setJobUrl(url);
     setLoading(true);
     setError("");
     setRoadmap("");
 
     try {
-      const data = await generateRoadmap(jobUrl);
+      const data = await generateRoadmap(url);
       setRoadmap(data.roadmap);
-      saveRoadmap(jobUrl, data.roadmap);
+      saveRoadmap(url, data.roadmap);
       setHistory(getRoadmaps());
     } catch (e: any) {
       setError("Oops! Please check your URL or try again later.");
@@ -50,6 +52,7 @@ export default function Home() {
   };
 
   const handleSelectHistory = (item: SavedRoadmap) => {
+    setJobUrl(item.jobInput);
     setRoadmap(item.roadmap);
     setError("");
   };
@@ -104,7 +107,8 @@ export default function Home() {
           setSidebarOpen={setSidebarOpen}
         />
 
-        <JobForm onSubmit={handleGenerate} loading={loading} />
+        <JobForm onSubmit={handleGenerate} loading={loading} jobUrl={jobUrl}
+          setJobUrl={setJobUrl} />
 
         {error && (
           <div className="text-zinc-400 text-sm text-center">{error}</div>

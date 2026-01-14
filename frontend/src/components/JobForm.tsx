@@ -1,14 +1,13 @@
-import { useState } from "react";
 import RoadmapLoader from "@/components/RoadmapLoader";
 
 type Props = {
   onSubmit: (jobUrl: string) => void;
   loading: boolean;
+  jobUrl: string;
+  setJobUrl: (url: string) => void;
 };
 
-export default function JobForm({ onSubmit, loading }: Props) {
-  const [jobUrl, setJobUrl] = useState("");
-
+export default function JobForm({ onSubmit, loading, jobUrl, setJobUrl }: Props) {
   return (
     <div className="rounded-2xl bg-zinc-900/50 backdrop-blur border border-zinc-800 p-8 shadow-xl space-y-6">
       <div className="space-y-2 text-center">
