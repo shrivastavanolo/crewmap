@@ -147,9 +147,3 @@ roadmap/
 * Redis locks prevent duplicate roadmap generation under concurrent access
 * Blocking AI operations are safely offloaded using thread pools
 * The backend is stateless aside from Redis, making it horizontally scalable
-
----
-
-## Demo
-
-* **Live demo:** [https://your-demo-site-link.com](https://crewmap-ecru.vercel.app/)
